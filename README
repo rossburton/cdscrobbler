@@ -1,0 +1,16 @@
+CD Upload Tool for Audioscrobbler
+
+Copyright (C) 2005 Ross Burton <ross@burtonini.com>
+Licensed under the GPL, version 2 or greater.
+
+A small tool to either sent track data to Audioscrobbler, taking the data from
+either the current CD (in the computer's CD drive) or a MusicBrainz album ID.
+Audioscrobbler is told that you just finished listening to the CD.
+
+$ upload.py
+
+Upload the current CD's track data
+
+$ upload.py 5f5f04ef-882b-498f-8e3b-973a82573cf3
+
+Upload the track data from a particular album on MusicBrainz
