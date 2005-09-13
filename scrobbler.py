@@ -1,5 +1,10 @@
 #!/usr/bin/python
 
+# Audioscrobbler python module
+# Copyright (C) Matt Biddulph
+# Licensed under the BSD
+# http://www.hackdiary.com/archives/000052.html
+
 import urllib2,urllib,re,time,md5,datetime,sys
 
 class Scrobbler(object):
