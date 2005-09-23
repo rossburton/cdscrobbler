@@ -62,6 +62,6 @@ for t in tracks:
     t.tracktime = current
 tracks.reverse()
 
-scrob = scrobbler.Scrobbler("rossburton", "dsiasb")
+scrob = scrobbler.Scrobbler("username", "password")
 scrob.handshake()
 scrob.submit(tracks)
