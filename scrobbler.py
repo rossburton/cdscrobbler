@@ -73,7 +73,7 @@ class Track(object):
         if tracktime:
             self.tracktime = tracktime
         else:
-            self.tracktime = datetime.datetime.now().isoformat(' ')
+            self.tracktime = datetime.datetime.utcnow().isoformat(' ')
 
     def __repr__(self):
         return "'"+self.name+"' by '"+self.artist+"' from '"+self.album+"'"

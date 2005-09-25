@@ -55,7 +55,7 @@ for ii in range(1, mb.GetResultInt(MBE_AlbumGetNumTracks) + 1):
     tracks.append(scrobbler.Track(artist, name, album, dura, mbid, None))
 
 # Fix up times on tracks
-current = datetime.datetime.now()
+current = datetime.datetime.utcnow()
 tracks.reverse()
 for t in tracks:
     current = current - datetime.timedelta(seconds=t.length)
