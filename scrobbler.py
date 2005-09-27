@@ -79,14 +79,16 @@ class Track(object):
         return "'"+self.name+"' by '"+self.artist+"' from '"+self.album+"'"
 
     def urlencoded(self,num):
+        def quote(s):
+            return urllib.quote_plus(s.encode("utf_8"))
         encode = ""
-        encode += "a["+str(num)+"]="+urllib.quote_plus(self.artist)
-        encode += "&t["+str(num)+"]="+urllib.quote_plus(self.name)
-        encode += "&l["+str(num)+"]="+urllib.quote_plus(str(self.length))
-        encode += "&i["+str(num)+"]="+ urllib.quote_plus(self.tracktime.isoformat(' '))
+        encode += "a["+str(num)+"]="+quote(self.artist)
+        encode += "&t["+str(num)+"]="+quote(self.name)
+        encode += "&l["+str(num)+"]="+quote(str(self.length))
+        encode += "&i["+str(num)+"]="+ quote(self.tracktime.isoformat(' '))
         if self.mbid is not None:
-            encode += "&m["+str(num)+"]="+urllib.quote_plus(self.mbid)
+            encode += "&m["+str(num)+"]="+quote(self.mbid)
         else:
             encode += "&m["+str(num)+"]="
-        encode += "&b["+str(num)+"]="+urllib.quote_plus(self.album)
+        encode += "&b["+str(num)+"]="+quote(self.album)
         return encode
