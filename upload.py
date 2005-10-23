@@ -27,7 +27,7 @@ config = ConfigParser.SafeConfigParser()
 config.read(os.path.expanduser('~/.cdscrobbler'))
 
 if not config.has_option("CDScrobbler", "username") or not config.has_option("CDScrobbler", "password"):
-    print "No config"
+    print "No complete configuration file found, see the README."
     sys.exit(1)
 
 mb = musicbrainz.mb()
