@@ -16,12 +16,19 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-import sys, datetime
+import os, sys, datetime, ConfigParser
 
 import musicbrainz
 from musicbrainz.queries import *
 
 import scrobbler
+
+config = ConfigParser.SafeConfigParser()
+config.read(os.path.expanduser('~/.cdscrobbler'))
+
+if not config.has_option("CDScrobbler", "username") or not config.has_option("CDScrobbler", "password"):
+    print "No config"
+    sys.exit(1)
 
 mb = musicbrainz.mb()
 
@@ -62,6 +69,7 @@ for t in tracks:
     t.tracktime = current
 tracks.reverse()
 
-scrob = scrobbler.Scrobbler("username", "password")
+scrob = scrobbler.Scrobbler(config.get("CDScrobbler", "username"),
+                            config.get("CDScrobbler", "password"))
 scrob.handshake()
 scrob.submit(tracks)
