@@ -1,0 +1,6 @@
+CD Scrobbler 1.0
+===============
+
+* First tarball release.
+* Configuration file, so no hard-coded usernames in source
+* Uses distutils to install
