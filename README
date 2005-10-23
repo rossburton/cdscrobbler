@@ -1,4 +1,4 @@
-CD Scrobbler, a CD Upload Tool for Audioscrobbler
+CD Scrobbler, a CD upload tool for Audioscrobbler/Last.fm
 
 Copyright (C) 2005 Ross Burton <ross@burtonini.com>
 Licensed under the GPL, version 2 or greater.
@@ -13,14 +13,14 @@ To configure it create ~/.cdscrobbler with the following format:
 username=...
 password=...
 
-If you don't do this, upload.py won't work.
+If you don't do this, cdscrobbler.py won't work.
 
 To use it, do this:
 
 $ cdscrobbler.py
 
-to upload the current CD's track data.  Or this:
+to send the current CD's track data.  Or this:
 
 $ cdscrobber.py 5f5f04ef-882b-498f-8e3b-973a82573cf3
 
-to upload the track data from a particular album on MusicBrainz.
+to sent the track data from a particular album on MusicBrainz.
