@@ -17,10 +17,10 @@ If you don't do this, upload.py won't work.
 
 To use it, do this:
 
-$ upload.py
+$ cdscrobbler.py
 
 to upload the current CD's track data.  Or this:
 
-$ upload.py 5f5f04ef-882b-498f-8e3b-973a82573cf3
+$ cdscrobber.py 5f5f04ef-882b-498f-8e3b-973a82573cf3
 
 to upload the track data from a particular album on MusicBrainz.
