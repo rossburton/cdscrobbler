@@ -70,6 +70,6 @@ for t in tracks:
 tracks.reverse()
 
 scrob = scrobbler.Scrobbler(config.get("CDScrobbler", "username"),
-                            config.get("CDScrobbler", "password"))
-scrob.handshake()
+                            config.get("CDScrobbler", "password"),
+                            client="cds", version="1.0")
 scrob.submit(tracks)
