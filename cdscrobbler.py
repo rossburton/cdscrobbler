@@ -71,5 +71,5 @@ tracks.reverse()
 
 scrob = scrobbler.Scrobbler(config.get("CDScrobbler", "username"),
                             config.get("CDScrobbler", "password"),
-                            client="cds", version="1.0")
+                            client="cds", version="0.1")
 scrob.submit(tracks)
