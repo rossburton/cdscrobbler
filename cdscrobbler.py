@@ -30,48 +30,56 @@ if not config.has_option("CDScrobbler", "username") or not config.has_option("CD
     print "No complete configuration file found, see the README."
     sys.exit(1)
 
-mb = musicbrainz.mb()
-
-if len(sys.argv) == 2:
-    mb.SetDepth(4)
-    mb.QueryWithArgs(MBQ_GetAlbumById, [sys.argv[1]])
-else:
-    mb.SetDepth(2)
-    mb.Query(MBQ_GetCDTOC)
-    cdid = mb.GetResultData(MBE_TOCGetCDIndexId)
-    mb.QueryWithArgs(MBQ_GetCDInfoFromCDIndexId, [cdid])
-
-count = mb.GetResultInt(MBE_GetNumAlbums)
-if count == 0:
-    print "Found no albums"
-    sys.exit(1)
-if count > 1:
-    print "TODO: found %d albums" % count
-    sys.exit(2)
-    
-tracks = []
-
-mb.Select1(MBS_SelectAlbum, 1)
-album = mb.GetResultData(MBE_AlbumGetAlbumName)
-for ii in range(1, mb.GetResultInt(MBE_AlbumGetNumTracks) + 1):
-    mbid = mb.GetIDFromURL(mb.GetResultData1(MBE_AlbumGetTrackId, ii))
-    artist = mb.GetResultData1(MBE_AlbumGetArtistName, ii)
-    name = mb.GetResultData1(MBE_AlbumGetTrackName, ii)
-    dura = mb.GetResultInt1(MBE_AlbumGetTrackDuration, ii) / 1000
-    track = mb.GetResultInt1(MBE_AlbumGetTrackNum, ii)
-    tracks.append(scrobbler.Track(artist, name, album, dura, mbid, None))
-
-# Fix up times on tracks
 current = datetime.datetime.utcnow()
-tracks.reverse()
-for t in tracks:
-    current = current - datetime.timedelta(seconds=t.length)
-    t.tracktime = current
-tracks.reverse()
 
 scrob = scrobbler.Scrobbler(config.get("CDScrobbler", "username"),
                             config.get("CDScrobbler", "password"),
                             client="cds", version="0.1")
 scrob.handshake()
-scrob.submit(tracks)
 
+mb = musicbrainz.mb()
+
+def upload_album():
+    global current
+    count = mb.GetResultInt(MBE_GetNumAlbums)
+    if count == 0:
+        print "Found no albums"
+        return
+    if count > 1:
+        print "TODO: found %d albums (skipping)" % count
+        return
+
+    tracks = []
+
+    mb.Select1(MBS_SelectAlbum, 1)
+    album = mb.GetResultData(MBE_AlbumGetAlbumName)
+    for ii in range(1, mb.GetResultInt(MBE_AlbumGetNumTracks) + 1):
+        mbid = mb.GetIDFromURL(mb.GetResultData1(MBE_AlbumGetTrackId, ii))
+        artist = mb.GetResultData1(MBE_AlbumGetArtistName, ii)
+        name = mb.GetResultData1(MBE_AlbumGetTrackName, ii)
+        dura = mb.GetResultInt1(MBE_AlbumGetTrackDuration, ii) / 1000
+        track = mb.GetResultInt1(MBE_AlbumGetTrackNum, ii)
+        tracks.append(scrobbler.Track(artist, name, album, dura, mbid, None))
+
+    # Fix up times on tracks
+    tracks.reverse()
+    for t in tracks:
+        current = current - datetime.timedelta(seconds=t.length)
+        t.tracktime = current
+    tracks.reverse()
+    
+    # Submit the songs to Audioscrobbler
+    scrob.submit(tracks)
+
+
+if len(sys.argv) >= 2:
+    mb.SetDepth(4)
+    for i in reversed(sys.argv[1:]):
+        mb.QueryWithArgs(MBQ_GetAlbumById, [i])
+        upload_album()
+else:
+    mb.SetDepth(2)
+    mb.Query(MBQ_GetCDTOC)
+    cdid = mb.GetResultData(MBE_TOCGetCDIndexId)
+    mb.QueryWithArgs(MBQ_GetCDInfoFromCDIndexId, [cdid])
+    upload_album()
