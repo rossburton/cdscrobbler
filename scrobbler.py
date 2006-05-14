@@ -53,7 +53,6 @@ class Scrobbler(object):
             post += track.urlencoded(count)
             count += 1
         post = unicode(post)
-        print post
         result = urllib2.urlopen(self.submiturl,post)
         results = result.readlines()
         if results[0].startswith("OK"):
